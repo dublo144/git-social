@@ -21,12 +21,17 @@ export default function Index() {
       </nav>
       <div className="container items-center justify-center flex-1 px-4 md:flex md:px-6">
         <div className="flex flex-col items-center p-4 space-y-4 text-center md:w-1/2">
-          <h1 className="text-3xl font-bold tracking-tighter md:text-5xl">
+          <h1 className="text-3xl tracking-tighter md:text-5xl">
             A{" "}
             <span className="font-extrabold text-transparent bg-gradient-to-r from-orange-700 via-blue-500 to-green-400 bg-clip-text bg-300% animate-gradient">
-              REVOLUTIONARY
+              MINIMALIST
+              <br />
             </span>{" "}
-            minimalist social platform
+            social platform for
+            <br />
+            <span className="font-extrabold text-transparent bg-gradient-to-r from-orange-700 via-blue-500 to-green-400 bg-clip-text bg-300% animate-gradient">
+              DEVELOPERS
+            </span>
           </h1>
 
           <p className="mt-2 text-gray-500">
