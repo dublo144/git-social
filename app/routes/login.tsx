@@ -5,6 +5,20 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Github } from "lucide-react";
 import { SupabaseOutletContextType } from "~/lib/supabase";
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
+import { getSupabaseWithSessionAndHeaders } from "~/lib/supabase.server";
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { headers, serverSession } = await getSupabaseWithSessionAndHeaders({
+    request,
+  });
+
+  if (serverSession) {
+    return redirect("/posts", { headers });
+  }
+
+  return json({ success: true }, { headers });
+};
 
 export default function Login() {
   const { supabase, domainUrl } = useOutletContext<SupabaseOutletContextType>();

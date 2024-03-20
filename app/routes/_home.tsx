@@ -1,13 +1,19 @@
-import { Link, Outlet } from "@remix-run/react";
+import { Link, Outlet, useOutletContext } from "@remix-run/react";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import AppLogo from "~/components/AppLogo";
 import { Button } from "~/components/ui/button";
+import { SupabaseOutletContextType } from "~/lib/supabase";
 
 export default function Home() {
   const username = "madsbrandt";
-
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const { supabase } = useOutletContext<SupabaseOutletContextType>();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+  };
+
   return (
     <section className="flex flex-col items-center w-full min-h-screen bg-white">
       <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between w-full px-6 border-b border-zinc-200 md:flex-none">
@@ -36,7 +42,7 @@ export default function Home() {
             src="https://i.pravatar.cc/40"
             style={{ aspectRatio: "40/40", objectFit: "cover" }}
           />
-          <Button>Logout</Button>
+          <Button onClick={handleSignOut}>Logout</Button>
         </div>
       </nav>
       <Outlet />

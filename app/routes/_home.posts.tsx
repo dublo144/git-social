@@ -1,5 +1,5 @@
 import { TabsContent } from "@radix-ui/react-tabs";
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigation } from "@remix-run/react";
 import Comments from "~/components/Comments";
 import LikeCounter from "~/components/LikeCounter";
@@ -7,8 +7,17 @@ import Post from "~/components/Post";
 import PostSearch from "~/components/PostSearch";
 import { Separator } from "~/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { getSupabaseWithSessionAndHeaders } from "~/lib/supabase.server";
 
-export const loader = ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { headers, serverSession } = await getSupabaseWithSessionAndHeaders({
+    request,
+  });
+
+  if (!serverSession) {
+    return redirect("/login", { headers });
+  }
+
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("query");
   return json({ query });

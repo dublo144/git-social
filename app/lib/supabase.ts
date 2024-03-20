@@ -23,7 +23,7 @@ type UseSupabase = {
 
 export const useSupabase = ({ env, serverSession }: UseSupabase) => {
   const [supabase] = useState(() =>
-    createBrowserClient<Database>(env.SUPABASE_URL!, env.SUPABASE_KEY)
+    createBrowserClient<Database>(env.SUPABASE_URL!, env.SUPABASE_KEY!)
   );
   const serverAccessToken = serverSession?.access_token;
   const revalidator = useRevalidator();
