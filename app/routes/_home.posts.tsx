@@ -1,8 +1,11 @@
-import { Separator } from "@radix-ui/react-separator";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData, useNavigation } from "@remix-run/react";
+import Comments from "~/components/Comments";
+import LikeCounter from "~/components/LikeCounter";
+import Post from "~/components/Post";
 import PostSearch from "~/components/PostSearch";
+import { Separator } from "~/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 export const loader = ({ request }: LoaderFunctionArgs) => {
@@ -28,12 +31,21 @@ export default function Posts() {
           <TabsTrigger value="my-posts">My Posts</TabsTrigger>
         </TabsList>
         <TabsContent value="feed">
-          <Separator />
+          <Separator className="my-4" />
           <PostSearch isSearching={isSearching} searchQuery={query || ""} />
-          {/* <Post>
-            <ViewLikes />
-            <ViewComments />
-          </Post> */}
+          <Post
+            author={{
+              avatarUrl: "https://i.pravatar.cc/40",
+              id: "123",
+              name: "John",
+              username: "JohnJohn",
+            }}
+            dateTimeString="1231231"
+            title="# title"
+          >
+            <LikeCounter likes={4} likedByUser={false} pathname="1234" />
+            <Comments pathname="123" commentCount={3} readonly={false} />
+          </Post>
         </TabsContent>
         <TabsContent value="my-posts"></TabsContent>
       </Tabs>
