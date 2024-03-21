@@ -1,10 +1,7 @@
 import { TabsContent } from "@radix-ui/react-tabs";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigation } from "@remix-run/react";
-import dayjs from "dayjs";
-import Comments from "~/components/Comments";
-import LikeCounter from "~/components/LikeCounter";
-import Post from "~/components/Post";
+import InfinitePostList from "~/components/InfinitePostList";
 import PostSearch from "~/components/PostSearch";
 import { Separator } from "~/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
@@ -29,17 +26,21 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Get URL-params
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("query");
+  const page = Number(searchParams.get("page")) || 1;
 
   // Fetch post data from DB
-  const { data } = await getPosts({ dbClient: supabase });
+  const { data, totalPages } = await getPosts({
+    dbClient: supabase,
+    page: isNaN(page) ? 1 : page,
+  });
 
   const posts = combinedPostLikes(data, sessionUserData.userId);
 
-  return json({ sessionUserData, posts, query, data }, { headers });
+  return json({ posts, totalPages, query, data }, { headers });
 };
 
 export default function Posts() {
-  const { sessionUserData, posts, query } = useLoaderData<typeof loader>();
+  const { posts, totalPages, query } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
 
   const isSearching = Boolean(
@@ -57,30 +58,7 @@ export default function Posts() {
         <TabsContent value="feed">
           <Separator className="my-4" />
           <PostSearch isSearching={isSearching} searchQuery={query || ""} />
-          {posts?.map((post) => (
-            <Post
-              key={post.id}
-              author={{
-                id: post.id,
-                avatarUrl: post.author!.avatar_url,
-                name: post.author!.name,
-                username: post.author!.username,
-              }}
-              dateTimeString={dayjs(post.created_at).format("DD-MM-YYYY")}
-              title={post.title}
-            >
-              <LikeCounter
-                likes={post.likes}
-                likedByUser={post.isLikedByUser}
-                pathname={"1231231"}
-              />
-              <Comments
-                commentCount={post.comments}
-                pathname="123123"
-                readonly={post.user_id !== sessionUserData.userId}
-              />
-            </Post>
-          ))}
+          <InfinitePostList currentPosts={posts} totalPages={totalPages} />
         </TabsContent>
         <TabsContent value="my-posts"></TabsContent>
       </Tabs>

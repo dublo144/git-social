@@ -1,9 +1,13 @@
 import { Link } from "@remix-run/react";
 import { MessageCircle } from "lucide-react";
 
-type Props = { commentCount: number; pathname: string; readonly: boolean };
+type Props = { commentCount: number; pathname: string; readonly?: boolean };
 
-export default function Comments({ commentCount, pathname, readonly }: Props) {
+export default function Comments({
+  commentCount,
+  pathname,
+  readonly = false,
+}: Props) {
   return readonly ? (
     <div className="flex items-center justify-center group">
       <MessageCircle className="w-4 h-4 text-gray-500 " />

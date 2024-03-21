@@ -3,6 +3,7 @@ import { Card } from "./ui/card";
 import AppLogo from "./AppLogo";
 import Markdown from "react-markdown";
 import { Separator } from "./ui/separator";
+import { Skeleton } from "./ui/skeleton";
 
 type User = {
   avatarUrl: string;
@@ -63,5 +64,17 @@ export default function Post({
         </div>
       </div>
     </Card>
+  );
+}
+
+export function PostSkeleton() {
+  return (
+    <div className="flex space-x-4 min-h-[12rem] my-3 p-8">
+      <Skeleton className="w-12 h-12 rounded-full" />
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-[250px]" />
+        <Skeleton className="h-4 w-[250px]" />
+      </div>
+    </div>
   );
 }

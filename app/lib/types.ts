@@ -1,4 +1,5 @@
 import type { Database } from "database.types";
+import { combinedPostLikes } from "./utils";
 
 type Post = Database["public"]["Tables"]["posts"]["Row"];
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
@@ -13,3 +14,10 @@ export type PostDetails = Post & {
   likes: Like[];
   comments: Comment[];
 };
+
+export type CombinedPostsWithAuthorAndLikes = ReturnType<
+  typeof combinedPostLikes
+>;
+
+export type SinglePostWithAuthorAndLikes =
+  CombinedPostsWithAuthorAndLikes[number];
