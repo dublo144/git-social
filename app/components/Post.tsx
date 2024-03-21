@@ -28,7 +28,10 @@ export default function Post({
   children,
 }: Props) {
   return (
-    <Card key={id} className="rounded-xl shadow-md overflow-hidden min-[12rem]">
+    <Card
+      key={id}
+      className="rounded-xl shadow-md overflow-hidden min-[12rem] mb-6"
+    >
       <div className="w-full p-4 md:p-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center">

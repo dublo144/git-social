@@ -3,6 +3,7 @@ import { useInfintePosts } from "~/hooks/useInfinitePosts";
 import { CombinedPostsWithAuthorAndLikes } from "~/lib/types";
 import MemoizedPostListItem from "./MemoizedPostListItem";
 import { PostSkeleton } from "./Post";
+import AppLogo from "./AppLogo";
 
 type Props = {
   totalPages: number;
@@ -14,6 +15,15 @@ export default function InfinitePostList({ totalPages, currentPosts }: Props) {
     totalPages,
     currentPosts,
   });
+
+  if (!posts.length) {
+    return (
+      <div className="flex justify-center items-center h-[50vh]">
+        <AppLogo className="w-10 h-10" />
+        <h2 className="ml-2">No posts found</h2>
+      </div>
+    );
+  }
 
   return (
     <Virtuoso

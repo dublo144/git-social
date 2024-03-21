@@ -32,6 +32,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { data, totalPages } = await getPosts({
     dbClient: supabase,
     page: isNaN(page) ? 1 : page,
+    searchQuery: query,
   });
 
   const posts = combinedPostLikes(data, sessionUserData.userId);
