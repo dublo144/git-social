@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import { Card } from "./ui/card";
 import AppLogo from "./AppLogo";
 import Markdown from "react-markdown";
+import { Separator } from "./ui/separator";
 
 type User = {
   avatarUrl: string;
@@ -55,7 +56,8 @@ export default function Post({
           <Markdown>{title}</Markdown>
         </div>
 
-        <div className="flex items-center justify-between mt-6">
+        <Separator className="my-4" />
+        <div className="flex items-center justify-between">
           <div className="flex space-x-4 text-gray-400">{children}</div>
           <div className="text-sm text-gray-400">{dateTimeString}</div>
         </div>

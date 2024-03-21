@@ -1,30 +1,45 @@
 import { TabsContent } from "@radix-ui/react-tabs";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigation } from "@remix-run/react";
+import dayjs from "dayjs";
 import Comments from "~/components/Comments";
 import LikeCounter from "~/components/LikeCounter";
 import Post from "~/components/Post";
 import PostSearch from "~/components/PostSearch";
 import { Separator } from "~/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { getPosts } from "~/lib/database.server";
 import { getSupabaseWithSessionAndHeaders } from "~/lib/supabase.server";
+import { combinedPostLikes, getUserDataFromSession } from "~/lib/utils";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { headers, serverSession } = await getSupabaseWithSessionAndHeaders({
-    request,
-  });
+  // Get the current session
+  const { headers, supabase, serverSession } =
+    await getSupabaseWithSessionAndHeaders({
+      request,
+    });
 
+  // Check if authenticated
   if (!serverSession) {
     return redirect("/login", { headers });
   }
 
+  const sessionUserData = getUserDataFromSession(serverSession);
+
+  // Get URL-params
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("query");
-  return json({ query });
+
+  // Fetch post data from DB
+  const { data } = await getPosts({ dbClient: supabase });
+
+  const posts = combinedPostLikes(data, sessionUserData.userId);
+
+  return json({ sessionUserData, posts, query, data }, { headers });
 };
 
 export default function Posts() {
-  const { query } = useLoaderData<typeof loader>();
+  const { sessionUserData, posts, query } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
 
   const isSearching = Boolean(
@@ -42,19 +57,30 @@ export default function Posts() {
         <TabsContent value="feed">
           <Separator className="my-4" />
           <PostSearch isSearching={isSearching} searchQuery={query || ""} />
-          <Post
-            author={{
-              avatarUrl: "https://i.pravatar.cc/40",
-              id: "123",
-              name: "John",
-              username: "JohnJohn",
-            }}
-            dateTimeString="1231231"
-            title="# title"
-          >
-            <LikeCounter likes={4} likedByUser={false} pathname="1234" />
-            <Comments pathname="123" commentCount={3} readonly={false} />
-          </Post>
+          {posts?.map((post) => (
+            <Post
+              key={post.id}
+              author={{
+                id: post.id,
+                avatarUrl: post.author!.avatar_url,
+                name: post.author!.name,
+                username: post.author!.username,
+              }}
+              dateTimeString={dayjs(post.created_at).format("DD-MM-YYYY")}
+              title={post.title}
+            >
+              <LikeCounter
+                likes={post.likes}
+                likedByUser={post.isLikedByUser}
+                pathname={"1231231"}
+              />
+              <Comments
+                commentCount={post.comments}
+                pathname="123123"
+                readonly={post.user_id !== sessionUserData.userId}
+              />
+            </Post>
+          ))}
         </TabsContent>
         <TabsContent value="my-posts"></TabsContent>
       </Tabs>
