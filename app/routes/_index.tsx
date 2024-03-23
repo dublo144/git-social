@@ -19,7 +19,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
 
   if (serverSession) {
-    return redirect("/posts", { headers });
+    return redirect("/feed", { headers });
   }
 
   return json({ success: true }, { headers });

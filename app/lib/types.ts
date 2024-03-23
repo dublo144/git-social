@@ -1,4 +1,4 @@
-import type { Database } from "database.types";
+import { Database } from "~/types/database.types";
 import { combinedPostLikes } from "./utils";
 
 type Post = Database["public"]["Tables"]["posts"]["Row"];

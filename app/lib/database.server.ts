@@ -1,5 +1,5 @@
-import { Database } from "database.types";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { Database } from "~/types/database.types";
 
 export async function getPosts({
   dbClient,
@@ -18,7 +18,7 @@ export async function getPosts({
       count: "exact",
     })
     .order("created_at", { ascending: false })
-    .range((page - 1) * limit, page);
+    .range((page - 1) * limit, page * limit - 1);
 
   // If searchQuery is present, add the ILike to the DB-query.
   if (searchQuery) {

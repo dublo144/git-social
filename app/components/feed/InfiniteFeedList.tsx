@@ -1,16 +1,16 @@
 import { Virtuoso } from "react-virtuoso";
-import { useInfintePosts } from "~/hooks/useInfinitePosts";
+import { useInfintePosts } from "~/hooks/useInfiniteFeed";
 import { CombinedPostsWithAuthorAndLikes } from "~/lib/types";
 import MemoizedPostListItem from "./MemoizedPostListItem";
 import { PostSkeleton } from "./Post";
-import AppLogo from "./AppLogo";
+import AppLogo from "../AppLogo";
 
 type Props = {
   totalPages: number;
   currentPosts: CombinedPostsWithAuthorAndLikes;
 };
 
-export default function InfinitePostList({ totalPages, currentPosts }: Props) {
+export default function InfiniteFeedList({ totalPages, currentPosts }: Props) {
   const { posts, loadMore, hasMore } = useInfintePosts({
     totalPages,
     currentPosts,

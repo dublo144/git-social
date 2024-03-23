@@ -1,6 +1,6 @@
 import { Form, useSubmit } from "@remix-run/react";
 import { Loader2 } from "lucide-react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { useEffect, useRef, useState } from "react";
 
 type Props = { searchQuery: string; isSearching: boolean };
@@ -21,7 +21,7 @@ export default function PostSearch({ searchQuery, isSearching }: Props) {
 
   return (
     <div className="flex items-center justify-between my-3">
-      <h2 className="w-7/12 font-bold md:text-xl">
+      <h2 className="w-7/12 font-bold text-indigo-500 md:text-xl">
         {query ? `Results for "${query}"` : "My Feed"}
       </h2>
       <div className="flex justify-center w-1/12">

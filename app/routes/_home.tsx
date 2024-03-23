@@ -1,51 +1,31 @@
-import { Link, Outlet, useOutletContext } from "@remix-run/react";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
-import AppLogo from "~/components/AppLogo";
-import { Button } from "~/components/ui/button";
-import { SupabaseOutletContextType } from "~/lib/supabase";
+import { Outlet } from "@remix-run/react";
+import Header from "~/components/layout/Header";
+import Sidebar from "~/components/layout/Sidebar";
 
 export default function Home() {
-  const username = "madsbrandt";
-  const [isNavOpen, setIsNavOpen] = useState(false);
-  const { supabase } = useOutletContext<SupabaseOutletContextType>();
+  // TODO: Move to sidenav
+  // const { supabase } = useOutletContext<SupabaseOutletContextType>();
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-  };
+  // const handleSignOut = async () => {
+  //   await supabase.auth.signOut();
+  // };
 
   return (
-    <section className="flex flex-col items-center w-full min-h-screen bg-white">
-      <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between w-full px-6 border-b border-zinc-200 md:flex-none">
-        <Link to={"/"} className="flex items-center space-x-2">
-          <AppLogo className="w-10 md:w-20" />
-          <h1 className="text-xl font-semibold text-zinc-900">LikeHuntr</h1>
-        </Link>
-        <button onClick={() => setIsNavOpen(!isNavOpen)} className="md:hidden">
-          {isNavOpen ? <X /> : <Menu />}
-        </button>
-        <div
-          className={`flex md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 ${
-            isNavOpen
-              ? "flex-col order-last w-full md:w-auto"
-              : "hidden md:flex"
-          }`}
-        >
-          <Link prefetch="intent" to={`/profile/${username}`}>
-            @{username}
-          </Link>
-          <img
-            alt="Profile"
-            className="rounded-full"
-            width={40}
-            height={40}
-            src="https://i.pravatar.cc/40"
-            style={{ aspectRatio: "40/40", objectFit: "cover" }}
-          />
-          <Button onClick={handleSignOut}>Logout</Button>
+    <div className="flex h-screen bg-gray-100">
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <Header />
+
+        <div className="flex h-full">
+          <Sidebar />
+          <main className="flex flex-col w-full overflow-x-hidden overflow-y-auto mb-14">
+            <div className="flex w-full p-6">
+              <div className="flex flex-col w-full min-h-screen">
+                <Outlet />
+              </div>
+            </div>
+          </main>
         </div>
-      </nav>
-      <Outlet />
-    </section>
+      </div>
+    </div>
   );
 }

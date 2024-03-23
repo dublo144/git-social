@@ -1,7 +1,7 @@
 import { useFetcher, useLocation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { CombinedPostsWithAuthorAndLikes } from "~/lib/types";
-import type { loader as postLoader } from "~/routes/_home.posts";
+import type { loader as postLoader } from "~/routes/_home.feed";
 
 type UseInfinitePosts = {
   totalPages: number;
